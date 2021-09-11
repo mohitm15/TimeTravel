@@ -1,3 +1,6 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/5da23b2d-e652-4ddd-893f-50587ae43f5c/deploy-status)](https://app.netlify.com/sites/adoring-einstein-8cdfd1/deploys)
+
+
 ## TimeTravel
 
 Time-travel is an application from which anyone can check the time of major Asian Cities. Currently it supports the following cities:
