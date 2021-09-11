@@ -13,7 +13,7 @@ const TimeZoneComponent = () => {
   };
 
   async function timeZone(city) {
-    await fetch(`http://worldtimeapi.org/api/timezone/Asia/${city}`)
+    await fetch(`https://worldtimeapi.org/api/timezone/Asia/${city}`)
       .then((response) => response.json())
       .then((json) => {
         //console.log(json);
