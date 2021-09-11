@@ -43,5 +43,5 @@ Time-travel is an application from which anyone can check the time of major Asia
 
 ### Deploy Link
 
-[https://adoring-einstein-8cdfd1.netlify.app/](url)
+[Deploy link](https://adoring-einstein-8cdfd1.netlify.app/)
     
