@@ -112,7 +112,7 @@ const TimeZoneComponent = () => {
       <div style={{ textAlign: "center", padding: "5%", fontSize: "120%" }}>
         <div>
           <label style={{ fontSize: "30px" }}>
-            Type Asian City Here..
+            Type ANY Asian City Here..
             <br />
             <input
               type="text"
