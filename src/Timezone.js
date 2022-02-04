@@ -109,30 +109,33 @@ const TimeZoneComponent = () => {
 
   return (
     <>
-      <div style={{ textAlign: "center", padding: "5%", fontSize: "120%" }}>
-        <div>
-          <label style={{ fontSize: "30px" }}>
-            Type ANY Asian City Here..
-            <br />
+      <div className="container text-center bg-gray-200 p-4">
+      <h1 className='p-2 text-5xl sm:text-7xl text-center'>Time Travel</h1>
+        <div className="border-2 border-black  w-3/5 text-center m-auto mt-3 p-5 bg-gray-200">
+          <label className="text-2xl ">
+            Type Any Asian City Here
             <input
               type="text"
-              style={{ margin: "1%", fontSize: "20px" }}
+              className="m-3 p-2 w-3/5 text-center text-extrabold rounded-md"
               placeholder=" Type city here.."
               onChange={(event) => setCity(event.target.value)}
             />
             <br />
-            <button onClick={() => handleClick()} style={{ fontSize: "20px" }}>
-              Get Current DateTime
-            </button>
           </label>
         </div>
-        <div style={{padding:'2%'}}>
-          Date: {mystr?.slice(1, 11)} <br />
-          Time: {mystr?.slice(12, 20)} <br />
-          Timezone: {data.timezone}
+        <div className="p-2">
+        <button onClick={() => handleClick()} className="bg-gray-700 hover:bg-gray-800 text-white px-3 md:px-4 py-5 text-lg sm:text-2xl font-semibold  hover:border-2 hover:border-white hover:outline hover:outline-gray-900 rounded-lg">
+              Get Current DateTime
+            </button>
         </div>
-        <div>
-          <img src={readySRC(city)} alt="Country flag" style={{border:"2px solid black"}}/>
+
+        <div className="flex flex-col justify-center item-center text-2xl p-2 sm:p-4">
+          <div><strong className="text-red-900 ">Date - </strong> {mystr?.slice(1, 11)}</div> 
+          <div><strong className="text-red-900 ">Time - </strong> {mystr?.slice(12, 20)}</div> 
+          <div><strong className="text-red-900 ">TimeZone - </strong> {data.timezone}</div>
+        </div>
+        <div className="text-center m-auto">
+          <img src={readySRC(city)} alt="Country flag" className="border-2 border-black w-3/5 m-auto"/>
         </div>
       </div>
     </>

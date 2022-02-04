@@ -4,12 +4,11 @@ import TimeZoneComponent from './Timezone';
 
 function App() {
   return (
-    <div >
-        <h1 style={{textAlign:'center',fontSize:'50px'}}>Time Travel</h1>
+    <div className='bg-gray-200'>
         <TimeZoneComponent />
-        <h2>
+        <div className='bg-orange-200 text-red-600 p-2 text-base sm:text-xl text-center'>
           Credits: Mohit-Maroliya
-        </h2>
+        </div>
     </div>
   );
 }
