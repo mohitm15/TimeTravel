@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Autosuggest from "react-autosuggest/dist/Autosuggest";
 
 const TimeZoneComponent = () => {
   const [data, setData] = useState([]);
@@ -26,6 +27,9 @@ const TimeZoneComponent = () => {
   }, []);
 
   let mystr = JSON.stringify(data.datetime);
+
+  const [value,setValue] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
 
   //console.log("city typed  =  "+city);
 
@@ -102,6 +106,59 @@ const TimeZoneComponent = () => {
     return code;
   };
 
+  const languages = [
+    {
+      name: 'Almaty',
+    },
+    {
+      name: 'Amman',
+    },
+    
+  ];
+
+  const escapeRegexCharacters = (str) => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function getSuggestions(value) {
+    const escapedValue = escapeRegexCharacters(value.trim());
+    
+    if (escapedValue === '') {
+      return [];
+    }
+  
+    const regex = new RegExp('^' + escapedValue, 'i');
+  
+    return languages.filter(language => regex.test(language.name));
+  }
+
+  function getSuggestionValue(suggestion) {
+    return suggestion.name;
+  }
+  
+  function renderSuggestion(suggestion) {
+    return (
+      <span>{suggestion.name}</span>
+    );
+  }
+
+  const onAutoChange = (e, { newValue, method}) => {
+    setValue(newValue);
+    setCity(e.target.value);
+  }
+
+  const onSuggestionsFetchRequested = ({value}) => {
+    setSuggestions(getSuggestions(value));
+  }
+  const onSuggestionsClearRequested = () => {
+    setSuggestions([]);
+  }
+
+  const inputProps = {
+    placeholder: "Type City Name",
+    value,
+    onChange: onAutoChange
+  }
   const readySRC = (city) => {
     let temp = "https://assets.thebasetrip.com/api/v2/countries/flags/".concat(cityToCodeMatcher(city));
     return temp.concat(".png");
@@ -119,6 +176,14 @@ const TimeZoneComponent = () => {
               className="m-3 p-2 w-3/5 text-center text-extrabold rounded-md"
               placeholder=" Type city here.."
               onChange={(event) => setCity(event.target.value)}
+            />
+            <Autosuggest 
+             suggestions = {suggestions}
+             onSuggestionsFetchRequested = {onSuggestionsFetchRequested}
+             onSuggestionsClearRequested = {onSuggestionsClearRequested}
+             getSuggestionValue = {getSuggestionValue}
+             renderSuggestion = {renderSuggestion}
+            inputProps = {inputProps}
             />
             <br />
           </label>
