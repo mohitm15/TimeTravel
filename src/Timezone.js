@@ -191,7 +191,7 @@ const TimeZoneComponent = () => {
   }
 
   function renderSuggestion(suggestion) {
-    return <span>{suggestion.name}</span>;
+    return <span className="text-base lg:text-xl xl:text-3xl" >{suggestion.name}</span>;
   }
 
   const onAutoChange = (e, { newValue, method }) => {
@@ -211,6 +211,7 @@ const TimeZoneComponent = () => {
     placeholder: "Any Asian Capital Here ...",
     value,
     onChange: onAutoChange,
+    className:"m-1 py-1 px-2 lg:py-3 border-[1px] border-black lg:px-5 xl:py-6 xl:px-8 lg:text-xl xl:text-3xl w-4/5 text-center text-extrabold rounded-md text-sm lg:text-base",
   };
   const readySRC = (city) => {
     let temp = "https://assets.thebasetrip.com/api/v2/countries/flags/".concat(
@@ -221,11 +222,10 @@ const TimeZoneComponent = () => {
 
   return (
     <>
-      <div className="container text-center bg-gray-200 p-4 m-auto">
+      <div className="container text-center bg-gradient-to-bl from-pink-400/60 to-purple-500/60    p-4 m-auto">
         <h1 className="p-2 text-5xl sm:text-7xl text-center">Time Travel</h1>
-        <div className="border-2 border-black  w-3/5 text-center text-3xl m-auto mt-3 p-5 bg-gray-200 flex flex-col justify-center">
+        <div className="border-2 border-black  w-3/5 text-center text-3xl m-auto mt-3 p-5 bg-gradient-to-tr from-red-100 to-blue-400 flex flex-col justify-center">
           <Autosuggest
-            className="m-3 p-2 w-3/5 text-center text-extrabold rounded-md"
             suggestions={suggestions}
             onSuggestionsFetchRequested={onSuggestionsFetchRequested}
             onSuggestionsClearRequested={onSuggestionsClearRequested}
