@@ -3,48 +3,22 @@
 
 ## TimeTravel
 
-Time-travel is an application from which anyone can check the time of major Asian Cities. Currently it supports the following cities:
+Time-travel is an application from which anyone can check the time of major Asian Cities. You can get the suggested list of cities based on your input.Then you can easily check the time of cities.
 
-- Almaty  
-- Amman   
-- Ashgabat
-- Baghdad  
-- Baku   
-- Bangkok  
-- Beirut  
-- Bishkek  
-- Brunei  
-- Damascus
-- Dhaka   
-- Dili   
-- Dushanbe 
-- Jakarta  
-- Jerusalem
-- Kabul   
-- Kathmandu 
-- Kolkata
-- Kuala_Lumpur 
-- Pyongyang 
-- Manila  
-- Riyadh  
-- Sanghai  
-- Seoul   
-- Singapore 
-- Taipei  
-- Tashkent 
-- Tbilisi  
-- Tehran  
-- Thimphu  
-- Tokyo   
-- Ulaanbaatar 
-- Yerevan  
 
 ### Preview
 
-![Screenshot from 2021-09-11 12-15-46](https://user-images.githubusercontent.com/35539313/132939425-7317a4f5-0a56-42ca-91c5-82500482f61a.png)
+#### Live Link
+
+[Visit Here](https://timetravel-mohit.netlify.app/)
+
+#### ScreenShots 
+
+**Mobile View**
+
+![Screenshot from 2022-03-30 17-11-55](https://user-images.githubusercontent.com/35539313/160827102-dc202046-e6a5-4384-9e94-631b04327eb9.png)
 
 
-### Deploy Link
+**Desktop View**
 
-[Deploy link](https://adoring-einstein-8cdfd1.netlify.app/)
-    
+![Screenshot from 2022-03-30 17-12-17](https://user-images.githubusercontent.com/35539313/160827133-ba9b7b4a-3837-4adb-9526-2403274f7007.png)

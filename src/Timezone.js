@@ -11,7 +11,7 @@ const TimeZoneComponent = () => {
   };
 
   async function timeZone(city) {
-    await fetch(`https://worldtimeapi.org/api/timezone/Asia/${city}`)
+    await fetch(`https://worldtimeapi.org/api/timezone/Asia/${city || "KolKata"}`)
       .then((response) => response.json())
       .then((json) => {
         //console.log(json);
@@ -222,8 +222,8 @@ const TimeZoneComponent = () => {
 
   return (
     <>
-      <div className="container text-center bg-gradient-to-bl from-pink-400/60 to-purple-500/60    p-4 m-auto">
-        <h1 className="p-2 text-5xl sm:text-7xl text-center">Time Travel</h1>
+      <div className="container text-center  p-4 m-auto">
+        <h1 className="p-2 text-5xl sm:text-6xl text-center text-white font-bold" style={{fontFamily:"Pacifico"}}>Time - Travel</h1>
         <div className="border-2 border-black  w-3/5 text-center text-3xl m-auto mt-3 p-5 bg-gradient-to-tr from-red-100 to-blue-400 flex flex-col justify-center">
           <Autosuggest
             suggestions={suggestions}
@@ -243,7 +243,7 @@ const TimeZoneComponent = () => {
           </button>
         </div>
 
-        <div className="flex flex-col justify-center item-center text-2xl p-2 sm:p-2">
+        <div className="flex flex-col justify-center item-center text-2xl p-2 sm:p-4 bg-gray-100/70 w-full   md:w-3/5 xl:w-2/5 m-auto">
           <div>
             <strong className="text-red-900 ">Date - </strong>{" "}
             {mystr?.slice(1, 11)}
@@ -261,7 +261,7 @@ const TimeZoneComponent = () => {
           <img
             src={readySRC(city)}
             alt="Country flag"
-            className="border-2 border-black w-3/5 sm:w-2/5 m-auto"
+            className="border-2 border-black w-3/5 sm:w-2/5 m-auto mt-3"
           />
         </div>
       </div>
