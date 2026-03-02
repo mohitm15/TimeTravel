@@ -33,7 +33,7 @@ const TimeZoneComponent = () => {
   const cityToCodeMatcher = (city) => {
     let code;
     if (city === "Kolkata") code = "india";
-    else if (city === "Almaty" || city==="Oral" || city === "Qostanay") code = "kazakhstan";
+    else if (city === "Almaty" || city === "Oral" || city === "Qostanay") code = "kazakhstan";
     else if (city === "Amman") code = "jordan";
     else if (city === "Ashgabat") code = "turkmenistan";
     else if (city === "Baghdad") code = "iraq";
@@ -48,13 +48,13 @@ const TimeZoneComponent = () => {
     else if (city === "Dili") code = "tuvalu";
     else if (city === "Dushanbe") code = "tajikistan";
     else if (city === "Dubai") code = "united-arab-emirates";
-    else if (city === "Famagusta" || city==="Nicosia") code = "cyprus";
+    else if (city === "Famagusta" || city === "Nicosia") code = "cyprus";
     else if (city === "Gaza" || city === "Hebron") code = "palestine";
-    else if (city === "Jakarta" || city === "Jayapura" || city === "Makassar" || city==="Pontianak") code = "indonesia";
+    else if (city === "Jakarta" || city === "Jayapura" || city === "Makassar" || city === "Pontianak") code = "indonesia";
     else if (city === "Jerusalem") code = "israel";
     else if (city === "Ho_Chi_Minh") code = "vietnam";
     else if (city === "Hong_Kong") code = "hong-kong";
-    else if (city === "Irkutsk" || city === "Kamchatka" || city === "Krasnoyarsk" || city==="Novokuznetsk" || city === "Omsk" || city === "Ust-Nera" || city==="Yakutsk" || city==="Vladivostok") code = "russia";
+    else if (city === "Irkutsk" || city === "Kamchatka" || city === "Krasnoyarsk" || city === "Novokuznetsk" || city === "Omsk" || city === "Ust-Nera" || city === "Yakutsk" || city === "Vladivostok") code = "russia";
     else if (city === "Kabul") code = "afghanistan";
     else if (city === "Karachi") code = "pakistan";
     else if (city === "Kathmandu") code = "nepal";
@@ -77,40 +77,6 @@ const TimeZoneComponent = () => {
     else if (city === "Yangon") code = "myanmar";
     else if (city === "Yerevan") code = "armenia";
     else code = "india";
-    // if (city === "Kolkata") code = "IN";
-    // else if (city === "Almaty") code = "KZ";
-    // else if (city === "Amman") code = "JO";
-    // else if (city === "Ashgabat") code = "TM";
-    // else if (city === "Baghdad") code = "IQ";
-    // else if (city === "Baku") code = "AZ";
-    // else if (city === "Bangkok") code = "TH";
-    // else if (city === "Beirut") code = "LB";
-    // else if (city === "Bishkek") code = "KG";
-    // else if (city === "Brunei") code = "BN";
-    // else if (city === "Damascus") code = "SY";
-    // else if (city === "Dhaka") code = "BD";
-    // else if (city === "Dili") code = "TL";
-    // else if (city === "Dushanbe") code = "TJ";
-    // else if (city === "Jakarta") code = "ID";
-    // else if (city === "Jerusalem") code = "IL";
-    // else if (city === "Kabul") code = "AF";
-    // else if (city === "Kathmandu") code = "NP";
-    // else if (city === "Kuala_Lumpur") code = "MY";
-    // else if (city === "Pyongyang") code = "KP";
-    // else if (city === "Manila") code = "PH";
-    // else if (city === "Riyadh") code = "SA";
-    // else if (city === "Sanghai") code = "CN";
-    // else if (city === "Seoul") code = "KR";
-    // else if (city === "Singapore") code = "SG";
-    // else if (city === "Taipei") code = "TW";
-    // else if (city === "Tashkent") code = "UZ";
-    // else if (city === "Tbilisi") code = "GE";
-    // else if (city === "Tehran") code = "IR";
-    // else if (city === "Thimphu") code = "BT";
-    // else if (city === "Tokyo") code = "JP";
-    // else if (city === "Ulaanbaatar") code = "MN";
-    // else if (city === "Yerevan") code = "AM";
-    // else code = "IN";
     return code;
   };
 
@@ -123,11 +89,11 @@ const TimeZoneComponent = () => {
     { name: "Bangkok" },
     { name: "Beirut" },
     { name: "Bishkek" },
-    { name: "Brunei" },{name: "Choibalsan"},
+    { name: "Brunei" }, { name: "Choibalsan" },
     { name: "Colombo" },
     { name: "Damascus" },
     { name: "Dhaka" },
-    { name: "Dili" },{name:"Dubai"},
+    { name: "Dili" }, { name: "Dubai" },
     { name: "Dushanbe" },
     { name: "Famagusta" },
     { name: "Gaza" },
@@ -137,26 +103,26 @@ const TimeZoneComponent = () => {
     { name: "Hovd" },
     { name: "Irkutsk" },
     { name: "Jakarta" },
-    {name: "Jayapura"},
+    { name: "Jayapura" },
     { name: "Jerusalem" },
     { name: "Kabul" },
-    {name: "Kamchatka"},
-    {name: "Karachi"},
+    { name: "Kamchatka" },
+    { name: "Karachi" },
     { name: "Kathmandu" },
     { name: "Kolkata" },
-    {name:"Krasnoyarsk"},
+    { name: "Krasnoyarsk" },
     { name: "Kuala_Lumpur" },
-    {name: "Kuching"},
-    {name:"Macau"},
-    {name: "Makassar"},
-    {name: "Nicosia"},{name: "Novokuznetsk"},{name:"Omsk"},{name:"Oral"},
-    {name: "Pontianak"},
+    { name: "Kuching" },
+    { name: "Macau" },
+    { name: "Makassar" },
+    { name: "Nicosia" }, { name: "Novokuznetsk" }, { name: "Omsk" }, { name: "Oral" },
+    { name: "Pontianak" },
     { name: "Pyongyang" },
     { name: "Manila" },
-    { name: "Qatar"},{name: "Qostanay"},
+    { name: "Qatar" }, { name: "Qostanay" },
     { name: "Riyadh" },
     { name: "Sanghai" },
-    {name: "Samarkand"},
+    { name: "Samarkand" },
     { name: "Seoul" },
     { name: "Singapore" },
     { name: "Taipei" },
@@ -166,8 +132,8 @@ const TimeZoneComponent = () => {
     { name: "Thimphu" },
     { name: "Tokyo" },
     { name: "Ulaanbaatar" },
-    {name: "Urumqi"}, {name:"Ust-Nera"}, {name:"Yakutsk"},{name:"Vladivostok"},
-    { name:"Yangon"},{name:""},{ name: "Yerevan" },
+    { name: "Urumqi" }, { name: "Ust-Nera" }, { name: "Yakutsk" }, { name: "Vladivostok" },
+    { name: "Yangon" }, { name: "" }, { name: "Yerevan" },
   ];
 
   const escapeRegexCharacters = (str) => {
@@ -211,7 +177,7 @@ const TimeZoneComponent = () => {
     placeholder: "Any Asian Capital Here ...",
     value,
     onChange: onAutoChange,
-    className:"m-1 py-1 px-2 lg:py-3 border-[1px] border-black lg:px-5 xl:py-6 xl:px-8 lg:text-xl xl:text-3xl w-4/5 text-center text-extrabold rounded-md text-sm lg:text-base",
+    className: "m-1 py-1 px-2 lg:py-3 border-[1px] border-black lg:px-5 xl:py-6 xl:px-8 lg:text-xl xl:text-3xl w-4/5 text-center text-extrabold rounded-md text-sm lg:text-base",
   };
   const readySRC = (city) => {
     let temp = "https://assets.thebasetrip.com/api/v2/countries/flags/".concat(
@@ -223,7 +189,7 @@ const TimeZoneComponent = () => {
   return (
     <>
       <div className="container text-center  p-4 m-auto">
-        <h1 className="p-2 text-5xl sm:text-6xl text-center text-white font-bold" style={{fontFamily:"Pacifico"}}>Time - Travel</h1>
+        <h1 className="p-2 text-5xl sm:text-6xl text-center text-white font-bold" style={{ fontFamily: "Pacifico" }}>Time - Travel</h1>
         <div className="border-2 border-black  w-3/5 text-center text-3xl m-auto mt-3 p-5 bg-gradient-to-tr from-red-100 to-blue-400 flex flex-col justify-center">
           <Autosuggest
             suggestions={suggestions}
