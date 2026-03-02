@@ -5,22 +5,31 @@ const TimeZoneComponent = () => {
   const [data, setData] = useState([]);
   const [city, setCity] = useState("");
 
+  const API_BASE_URL = "https://time.now/developer/api/timezone/Asia/";
+
   const handleClick = () => {
-    timeZone(city);
-    //console.log("city from ue = " + city);
+    fetchTimeZone(city);
   };
 
-  async function timeZone(city) {
-    await fetch(`https://worldtimeapi.org/api/timezone/Asia/${city || "KolKata"}`)
-      .then((response) => response.json())
-      .then((json) => {
-        //console.log(json);
-        setData(json);
-      });
-  }
+  const fetchTimeZone = async (targetCity) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${targetCity || "Kolkata"}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log("Timezone Data API Response:", json);
+      setData(json);
+    } catch (error) {
+      console.error("Failed to fetch timezone data from API:", error);
+      // Fallback or error state could be handled here
+    }
+  };
 
   useEffect(() => {
-    timeZone();
+    fetchTimeZone();
   }, []);
 
   let mystr = JSON.stringify(data.datetime);
