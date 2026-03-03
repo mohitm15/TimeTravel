@@ -1,6 +1,57 @@
 import React, { useState, useEffect } from "react";
 import Autosuggest from "react-autosuggest/dist/Autosuggest";
 
+const CITY_TO_COUNTRY_MAP = {
+  Almaty: "kazakhstan", Oral: "kazakhstan", Qostanay: "kazakhstan",
+  Amman: "jordan",
+  Ashgabat: "turkmenistan",
+  Baghdad: "iraq",
+  Baku: "azerbaijan",
+  Bangkok: "thailand",
+  Beirut: "lebanon",
+  Bishkek: "kyrgyzstan",
+  Brunei: "brunei",
+  Colombo: "sri-lanka",
+  Damascus: "syria",
+  Dhaka: "bangladesh",
+  Dili: "tuvalu",
+  Dushanbe: "tajikistan",
+  Dubai: "united-arab-emirates",
+  Famagusta: "cyprus", Nicosia: "cyprus",
+  Gaza: "palestine", Hebron: "palestine",
+  Jakarta: "indonesia", Jayapura: "indonesia", Makassar: "indonesia", Pontianak: "indonesia",
+  Jerusalem: "israel",
+  Ho_Chi_Minh: "vietnam",
+  Hong_Kong: "hong-kong",
+  Irkutsk: "russia", Kamchatka: "russia", Krasnoyarsk: "russia", Novokuznetsk: "russia", Omsk: "russia", "Ust-Nera": "russia", Yakutsk: "russia", Vladivostok: "russia",
+  Kabul: "afghanistan",
+  Karachi: "pakistan",
+  Kathmandu: "nepal",
+  Kolkata: "india",
+  Kuala_Lumpur: "malaysia", Kuching: "malaysia",
+  Macau: "macau",
+  Manila: "philippines",
+  Pyongyang: "north-korea",
+  Qatar: "qatar",
+  Riyadh: "saudi-arabia",
+  Sanghai: "china", Urumqi: "china",
+  Samarkand: "uzbekistan", Tashkent: "uzbekistan",
+  Seoul: "south-korea",
+  Singapore: "singapore",
+  Taipei: "taiwan",
+  Tbilisi: "georgia",
+  Tehran: "iran",
+  Thimphu: "bhutan",
+  Tokyo: "japan",
+  Ulaanbaatar: "mongolia", Hovd: "mongolia", Choibalsan: "mongolia",
+  Yangon: "myanmar",
+  Yerevan: "armenia"
+};
+
+const AVAILABLE_CITIES = Object.keys(CITY_TO_COUNTRY_MAP)
+  .sort()
+  .map((city) => ({ name: city }));
+
 const TimeZoneComponent = () => {
   const [data, setData] = useState([]);
   const [city, setCity] = useState("");
@@ -40,110 +91,8 @@ const TimeZoneComponent = () => {
   //console.log("city typed  =  "+city);
 
   const cityToCodeMatcher = (city) => {
-    let code;
-    if (city === "Kolkata") code = "india";
-    else if (city === "Almaty" || city === "Oral" || city === "Qostanay") code = "kazakhstan";
-    else if (city === "Amman") code = "jordan";
-    else if (city === "Ashgabat") code = "turkmenistan";
-    else if (city === "Baghdad") code = "iraq";
-    else if (city === "Baku") code = "azerbaijan";
-    else if (city === "Bangkok") code = "thailand";
-    else if (city === "Beirut") code = "lebanon";
-    else if (city === "Bishkek") code = "kyrgyzstan";
-    else if (city === "Brunei") code = "brunei";
-    else if (city === "Colombo") code = "sri-lanka";
-    else if (city === "Damascus") code = "syria";
-    else if (city === "Dhaka") code = "bangladesh";
-    else if (city === "Dili") code = "tuvalu";
-    else if (city === "Dushanbe") code = "tajikistan";
-    else if (city === "Dubai") code = "united-arab-emirates";
-    else if (city === "Famagusta" || city === "Nicosia") code = "cyprus";
-    else if (city === "Gaza" || city === "Hebron") code = "palestine";
-    else if (city === "Jakarta" || city === "Jayapura" || city === "Makassar" || city === "Pontianak") code = "indonesia";
-    else if (city === "Jerusalem") code = "israel";
-    else if (city === "Ho_Chi_Minh") code = "vietnam";
-    else if (city === "Hong_Kong") code = "hong-kong";
-    else if (city === "Irkutsk" || city === "Kamchatka" || city === "Krasnoyarsk" || city === "Novokuznetsk" || city === "Omsk" || city === "Ust-Nera" || city === "Yakutsk" || city === "Vladivostok") code = "russia";
-    else if (city === "Kabul") code = "afghanistan";
-    else if (city === "Karachi") code = "pakistan";
-    else if (city === "Kathmandu") code = "nepal";
-    else if (city === "Kuala_Lumpur" || city === "Kuching") code = "malaysia";
-    else if (city === "Macau") code = "macau";
-    else if (city === "Pyongyang") code = "north-korea";
-    else if (city === "Manila") code = "philippines";
-    else if (city === "Qatar") code = "qatar";
-    else if (city === "Riyadh") code = "saudi-arabia";
-    else if (city === "Sanghai" || city === "Urumqi") code = "china";
-    else if (city === "Seoul") code = "south-korea";
-    else if (city === "Singapore") code = "singapore";
-    else if (city === "Taipei") code = "taiwan";
-    else if (city === "Tashkent" || city === "Samarkand") code = "uzbekistan";
-    else if (city === "Tbilisi") code = "georgia";
-    else if (city === "Tehran") code = "iran";
-    else if (city === "Thimphu") code = "bhutan";
-    else if (city === "Tokyo") code = "japan";
-    else if (city === "Ulaanbaatar" || city === "Hovd" || city === "Choibalsan") code = "mongolia";
-    else if (city === "Yangon") code = "myanmar";
-    else if (city === "Yerevan") code = "armenia";
-    else code = "india";
-    return code;
+    return CITY_TO_COUNTRY_MAP[city] || "india";
   };
-
-  const languages = [
-    { name: "Almaty" },
-    { name: "Amman" },
-    { name: "Ashgabat" },
-    { name: "Baghdad" },
-    { name: "Baku" },
-    { name: "Bangkok" },
-    { name: "Beirut" },
-    { name: "Bishkek" },
-    { name: "Brunei" }, { name: "Choibalsan" },
-    { name: "Colombo" },
-    { name: "Damascus" },
-    { name: "Dhaka" },
-    { name: "Dili" }, { name: "Dubai" },
-    { name: "Dushanbe" },
-    { name: "Famagusta" },
-    { name: "Gaza" },
-    { name: "Hebron" },
-    { name: "Ho_Chi_Minh" },
-    { name: "Hong_Kong" },
-    { name: "Hovd" },
-    { name: "Irkutsk" },
-    { name: "Jakarta" },
-    { name: "Jayapura" },
-    { name: "Jerusalem" },
-    { name: "Kabul" },
-    { name: "Kamchatka" },
-    { name: "Karachi" },
-    { name: "Kathmandu" },
-    { name: "Kolkata" },
-    { name: "Krasnoyarsk" },
-    { name: "Kuala_Lumpur" },
-    { name: "Kuching" },
-    { name: "Macau" },
-    { name: "Makassar" },
-    { name: "Nicosia" }, { name: "Novokuznetsk" }, { name: "Omsk" }, { name: "Oral" },
-    { name: "Pontianak" },
-    { name: "Pyongyang" },
-    { name: "Manila" },
-    { name: "Qatar" }, { name: "Qostanay" },
-    { name: "Riyadh" },
-    { name: "Sanghai" },
-    { name: "Samarkand" },
-    { name: "Seoul" },
-    { name: "Singapore" },
-    { name: "Taipei" },
-    { name: "Tashkent" },
-    { name: "Tbilisi" },
-    { name: "Tehran" },
-    { name: "Thimphu" },
-    { name: "Tokyo" },
-    { name: "Ulaanbaatar" },
-    { name: "Urumqi" }, { name: "Ust-Nera" }, { name: "Yakutsk" }, { name: "Vladivostok" },
-    { name: "Yangon" }, { name: "" }, { name: "Yerevan" },
-  ];
 
   const escapeRegexCharacters = (str) => {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -158,7 +107,7 @@ const TimeZoneComponent = () => {
 
     const regex = new RegExp("^" + escapedValue, "i");
 
-    return languages.filter((language) => regex.test(language.name));
+    return AVAILABLE_CITIES.filter((cityObj) => regex.test(cityObj.name));
   }
 
   function getSuggestionValue(suggestion) {
@@ -188,6 +137,7 @@ const TimeZoneComponent = () => {
     onChange: onAutoChange,
     className: "m-1 py-1 px-2 lg:py-3 border-[1px] border-black lg:px-5 xl:py-6 xl:px-8 lg:text-xl xl:text-3xl w-4/5 text-center text-extrabold rounded-md text-sm lg:text-base",
   };
+
   const readySRC = (city) => {
     let temp = "https://assets.thebasetrip.com/api/v2/countries/flags/".concat(
       cityToCodeMatcher(city)
