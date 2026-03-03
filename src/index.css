@@ -11,3 +11,61 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Autosuggest Custom Styling for Glassmorphism Dark Theme */
+.react-autosuggest__container {
+  position: relative;
+  width: 100%;
+}
+
+.react-autosuggest__suggestions-container {
+  display: none;
+}
+
+.react-autosuggest__suggestions-container--open {
+  display: block;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  margin-top: 8px;
+  background-color: rgba(17, 24, 39, 0.85); /* Tailwind gray-900 with opacity */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem; /* Tailwind rounded-xl */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  font-family: inherit;
+  z-index: 50;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for suggestions */
+.react-autosuggest__suggestions-container--open::-webkit-scrollbar {
+  width: 6px;
+}
+.react-autosuggest__suggestions-container--open::-webkit-scrollbar-track {
+  background: transparent;
+}
+.react-autosuggest__suggestions-container--open::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.react-autosuggest__suggestions-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.react-autosuggest__suggestion {
+  cursor: pointer;
+  padding: 10px 20px;
+  color: #e5e7eb; /* Tailwind gray-200 */
+  transition: all 0.2s ease;
+}
+
+.react-autosuggest__suggestion--highlighted {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}

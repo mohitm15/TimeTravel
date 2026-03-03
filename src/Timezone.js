@@ -53,8 +53,10 @@ const AVAILABLE_CITIES = Object.keys(CITY_TO_COUNTRY_MAP)
   .map((city) => ({ name: city }));
 
 const TimeZoneComponent = () => {
-  const [data, setData] = useState([]);
-  const [city, setCity] = useState("");
+  const [data, setData] = useState(null);
+  const [city, setCity] = useState("Kolkata");
+  const [value, setValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
   const API_BASE_URL = "https://time.now/developer/api/timezone/Asia/";
 
@@ -63,50 +65,35 @@ const TimeZoneComponent = () => {
   };
 
   const fetchTimeZone = async (targetCity) => {
+    if (!targetCity) return;
     try {
-      const response = await fetch(`${API_BASE_URL}${targetCity || "Kolkata"}`);
-
+      const response = await fetch(`${API_BASE_URL}${targetCity}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
       const json = await response.json();
-      console.log("Timezone Data API Response:", json);
       setData(json);
     } catch (error) {
-      console.error("Failed to fetch timezone data from API:", error);
-      // Fallback or error state could be handled here
+      console.error("Failed to fetch timezone data:", error);
     }
   };
 
   useEffect(() => {
-    fetchTimeZone();
-  }, []);
+    fetchTimeZone(city);
+  }, [city]);
 
-  let mystr = JSON.stringify(data.datetime);
-
-  const [value, setValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-
-  //console.log("city typed  =  "+city);
-
-  const cityToCodeMatcher = (city) => {
-    return CITY_TO_COUNTRY_MAP[city] || "india";
+  const cityToCodeMatcher = (cityName) => {
+    return CITY_TO_COUNTRY_MAP[cityName] || "india";
   };
 
   const escapeRegexCharacters = (str) => {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   };
 
-  function getSuggestions(value) {
-    const escapedValue = escapeRegexCharacters(value.trim());
-
-    if (escapedValue === "") {
-      return [];
-    }
-
+  function getSuggestions(val) {
+    const escapedValue = escapeRegexCharacters(val.trim());
+    if (escapedValue === "") return [];
     const regex = new RegExp("^" + escapedValue, "i");
-
     return AVAILABLE_CITIES.filter((cityObj) => regex.test(cityObj.name));
   }
 
@@ -114,83 +101,198 @@ const TimeZoneComponent = () => {
     return suggestion.name;
   }
 
+  const readySRC = (cityName) => {
+    return `https://assets.thebasetrip.com/api/v2/countries/flags/${cityToCodeMatcher(cityName)}.png`;
+  };
+
   function renderSuggestion(suggestion) {
-    return <span className="text-base lg:text-xl xl:text-3xl" >{suggestion.name}</span>;
+    return (
+      <div className="flex items-center gap-3">
+        <img src={readySRC(suggestion.name)} alt="flag" className="w-6 h-4 object-cover rounded-sm shadow-sm" />
+        <span className="text-base font-medium">{suggestion.name} &mdash; <span className="text-gray-400 capitalize">{cityToCodeMatcher(suggestion.name).replace("-", " ")}</span></span>
+      </div>
+    );
   }
 
-  const onAutoChange = (e, { newValue, method }) => {
+  const onAutoChange = (e, { newValue }) => {
     setValue(newValue);
-    //console.log(newValue)
     setCity(newValue);
   };
 
   const onSuggestionsFetchRequested = ({ value }) => {
     setSuggestions(getSuggestions(value));
   };
+
   const onSuggestionsClearRequested = () => {
     setSuggestions([]);
   };
 
   const inputProps = {
-    placeholder: "Any Asian Capital Here ...",
+    placeholder: "Select Capital City of any Asian Country...",
     value,
     onChange: onAutoChange,
-    className: "m-1 py-1 px-2 lg:py-3 border-[1px] border-black lg:px-5 xl:py-6 xl:px-8 lg:text-xl xl:text-3xl w-4/5 text-center text-extrabold rounded-md text-sm lg:text-base",
+    className: "w-full bg-transparent text-white placeholder-gray-400 border-none outline-none py-3 px-4 text-lg",
   };
 
-  const readySRC = (city) => {
-    let temp = "https://assets.thebasetrip.com/api/v2/countries/flags/".concat(
-      cityToCodeMatcher(city)
-    );
-    return temp.concat(".png");
-  };
+  // Safe parsing of datetime
+  const dateStr = data?.datetime ? data.datetime.slice(0, 10).split("-").reverse().join("-") : "Loading..."; // e.g., 03-03-2026 format approximation
+  const timeStr = data?.datetime ? data.datetime.slice(11, 19) : "--:--:--";
+  const timeZoneDisplay = data?.timezone || "Loading...";
 
   return (
-    <>
-      <div className="container text-center  p-4 m-auto">
-        <h1 className="p-2 text-5xl sm:text-6xl text-center text-white font-bold" style={{ fontFamily: "Pacifico" }}>Time - Travel</h1>
-        <div className="border-2 border-black  w-3/5 text-center text-3xl m-auto mt-3 p-5 bg-gradient-to-tr from-red-100 to-blue-400 flex flex-col justify-center">
-          <Autosuggest
-            suggestions={suggestions}
-            onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={onSuggestionsClearRequested}
-            getSuggestionValue={getSuggestionValue}
-            renderSuggestion={renderSuggestion}
-            inputProps={inputProps}
-          />
-        </div>
-        <div className="p-2 sm:p-10">
-          <button
-            onClick={() => handleClick()}
-            className="bg-gray-700 hover:bg-gray-800 text-white px-3 md:px-4 py-5 text-lg sm:text-2xl font-semibold  hover:border-2 hover:border-white hover:outline hover:outline-gray-900 rounded-lg"
-          >
-            Get Current DateTime
-          </button>
+    <div className="w-full max-w-6xl mx-auto px-4 py-8">
+
+      {/* NAVBAR */}
+      <nav className="flex items-center justify-between mb-16">
+        {/* hamburger icon */}
+        <button className="p-2 text-white hover:bg-white/10 rounded-full transition-colors">
+          {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg> */}
+        </button>
+
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <svg className="w-8 h-8 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+            </svg>
+            <h1 className="text-4xl sm:text-5xl text-white font-bold tracking-wider" style={{ fontFamily: "Pacifico" }}>Time • Travel</h1>
+          </div>
+          <p className="text-blue-200/80 text-sm tracking-widest font-light">Explore Time Across Asian <span className="font-semibold text-blue-400">Capitals</span></p>
         </div>
 
-        <div className="flex flex-col justify-center item-center text-2xl p-2 sm:p-4 bg-gray-100/70 w-full   md:w-3/5 xl:w-2/5 m-auto">
-          <div>
-            <strong className="text-red-900 ">Date - </strong>{" "}
-            {mystr?.slice(1, 11)}
-          </div>
-          <div>
-            <strong className="text-red-900 ">Time - </strong>{" "}
-            {mystr?.slice(12, 20)}
-          </div>
-          <div>
-            <strong className="text-red-900 ">TimeZone - </strong>{" "}
-            {data.timezone}
-          </div>
+        <div className="flex items-center gap-3">
+          <button className="p-2 text-white hover:bg-white/10 rounded-full transition-colors">
+            {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg> */}
+          </button>
+          <button className="p-2 text-white hover:bg-white/10 rounded-full transition-colors">
+            {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> */}
+          </button>
         </div>
-        <div className="text-center m-auto">
-          <img
-            src={readySRC(city)}
-            alt="Country flag"
-            className="border-2 border-black w-3/5 sm:w-2/5 m-auto mt-3"
-          />
+      </nav>
+
+      {/* SEARCH BAR */}
+      <div className="flex justify-center mb-16 relative z-50">
+        <div className="w-full max-w-2xl bg-gray-900/60 backdrop-blur-md border border-blue-500/50 rounded-full flex items-center px-4 shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-shadow duration-300">
+          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+
+          <div className="flex-grow">
+            <Autosuggest
+              suggestions={suggestions}
+              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={onSuggestionsClearRequested}
+              getSuggestionValue={getSuggestionValue}
+              renderSuggestion={renderSuggestion}
+              inputProps={inputProps}
+            />
+          </div>
+
+          <svg className="w-6 h-6 text-gray-400 cursor-pointer hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
         </div>
       </div>
-    </>
+
+      {/* DATA DISPLAY SECTION */}
+      {data && (
+        <div className="flex flex-col items-center animate-fade-in-up">
+
+          {/* Header */}
+          <div className="text-center mb-6">
+            <p className="text-gray-300 text-sm mb-2">Selected Capital</p>
+            <div className="flex items-center justify-center gap-3">
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <h2 className="text-3xl font-bold text-white tracking-wide">{city}, <span className="font-normal text-gray-300 capitalize">{cityToCodeMatcher(city).replace("-", " ")}</span></h2>
+              <img src={readySRC(city)} alt="Small flag" className="w-8 h-6 rounded object-cover shadow-sm ml-2" />
+              <button
+                onClick={handleClick}
+                className="flex items-center ml-4 bg-gray-800/80 hover:bg-gray-700 backdrop-blur-md text-white px-2 py-2 rounded-full border border-white/10 hover:border-blue-400/50 shadow-lg hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-300 font-medium tracking-wide"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Time Card */}
+          <div className="w-full max-w-4xl bg-white/5 backdrop-blur-lg   rounded-3xl p-6 sm:p-10 shadow-2xl mb-12 flex flex-col md:flex-row items-center justify-between gap-8 divide-y md:divide-y-0 md:divide-x divide-white/10">
+
+            {/* Date */}
+            <div className="flex-1 flex flex-col items-center justify-center w-full pt-4 md:pt-0">
+              <div className="flex items-center gap-2 text-blue-300 mb-3">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span className="font-medium tracking-wide">Date</span>
+              </div>
+              <div className="text-2xl text-white font-light tracking-wide">{dateStr}</div>
+            </div>
+
+            {/* Time */}
+            <div className="flex-1 flex flex-col items-center justify-center w-full pt-6 md:pt-0">
+              <div className="flex items-center gap-2 text-blue-300 mb-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span className="font-medium tracking-wide">Time</span>
+              </div>
+              <div className="text-5xl sm:text-6xl text-white font-bold tracking-wider mb-1 drop-shadow-md">{timeStr}</div>
+              <div className="text-sm text-gray-400">(Local Time)</div>
+            </div>
+
+            {/* TimeZone */}
+            <div className="flex-1 flex flex-col items-center justify-center w-full pt-6 md:pt-0">
+              <div className="flex items-center gap-2 text-blue-300 mb-3">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                <span className="font-medium tracking-wide">TimeZone</span>
+              </div>
+              <div className="text-2xl text-white font-light tracking-wide">{timeZoneDisplay}</div>
+            </div>
+
+          </div>
+
+          {/* Bottom Info Section */}
+          <div className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-center gap-16 md:gap-32 mb-12">
+
+            {/* Big Flag */}
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-4 w-full mb-6">
+                <div className="h-px bg-white/20 flex-1"></div>
+                <span className="text-gray-300 tracking-widest text-sm uppercase">Country Stats</span>
+                <div className="h-px bg-white/20 flex-1"></div>
+              </div>
+              <img
+                src={readySRC(city)}
+                alt="Large Country Flag"
+                className="w-64 h-40 object-cover rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform -rotate-2 hover:rotate-0 transition-transform duration-500 border border-white/10"
+              />
+            </div>
+
+            {/* Static Facts */}
+            <div className="flex flex-col gap-4 text-gray-300">
+              <div className="flex items-center gap-4">
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                <span className="w-24 text-gray-400">Country:</span>
+                <span className="font-medium text-white capitalize">{cityToCodeMatcher(city).replace("-", " ")}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                <span className="w-24 text-gray-400">Capital:</span>
+                <span className="font-medium text-white">{city}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span className="w-24 text-gray-400">Currency:</span>
+                <span className="font-medium text-white">¥ (Placeholder)</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span className="w-24 text-gray-400">Population:</span>
+                <span className="font-medium text-white">120+ Million</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                <span className="w-24 text-gray-400">Language:</span>
+                <span className="font-medium text-white">Local / English</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      )}
+    </div>
   );
 };
 export default TimeZoneComponent;

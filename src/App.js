@@ -5,11 +5,18 @@ import bg from "./back.jpg";
 
 function App() {
   return (
-    <div style={{backgroundImage: `url(${bg})`}} className="h-full">
-        <TimeZoneComponent />
-        <div className='bg-orange-200 text-red-600 p-2 text-base sm:text-xl text-center'>
-          Credits: Mohit-Maroliya
+    <div
+      className="min-h-screen bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: `url(${bg})` }}
+    >
+      <div className="min-h-screen bg-black/60 text-white flex flex-col font-sans">
+        <div className="flex-grow">
+          <TimeZoneComponent />
         </div>
+        <footer className="text-center py-4 text-white/50 text-sm border-t border-white/10">
+          © 2026 Time-Travel - Created by Mohit-Maroliya
+        </footer>
+      </div>
     </div>
   );
 }
