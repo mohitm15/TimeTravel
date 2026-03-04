@@ -268,7 +268,7 @@ const TimeZoneComponent = () => {
                 <img
                   src={readySRC(city)}
                   alt="Large Country Flag"
-                  className="w-64 h-40 object-cover rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform -rotate-2 hover:rotate-0 transition-transform duration-500 border border-white/10"
+                  className="w-64 h-40 object-cover rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] waving-flag border border-white/10"
                 />
               </div>
 

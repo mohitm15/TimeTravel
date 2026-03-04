@@ -134,3 +134,22 @@
   background-color: rgba(59, 130, 246, 0.2);
   color: white;
 }
+
+@keyframes flag-wave {
+  0% {
+    transform: perspective(800px) rotateY(-5deg) rotateX(5deg) scale(1);
+  }
+
+  50% {
+    transform: perspective(800px) rotateY(10deg) rotateX(-5deg) scale(0.98);
+  }
+
+  100% {
+    transform: perspective(800px) rotateY(-5deg) rotateX(5deg) scale(1);
+  }
+}
+
+.waving-flag {
+  transform-origin: left center;
+  animation: flag-wave 3s ease-in-out infinite;
+}
