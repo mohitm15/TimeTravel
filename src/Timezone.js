@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Autosuggest from "react-autosuggest/dist/Autosuggest";
 
-//TODO: The api response does not shows the default time after clearing the input
-//TODO: Integerating the country stats api
 
 const CITY_TO_COUNTRY_MAP = {
   Almaty: { name: "kazakhstan", code: "kaz" }, Oral: { name: "kazakhstan", code: "kaz" }, Qostanay: { name: "kazakhstan", code: "kaz" },
@@ -152,8 +150,6 @@ const TimeZoneComponent = () => {
     setValue(newValue);
     if (!newValue || newValue.trim() === "") {
       setCity("Kolkata");
-    } else {
-      setCity(newValue);
     }
   };
 
@@ -163,6 +159,11 @@ const TimeZoneComponent = () => {
 
   const onSuggestionsClearRequested = () => {
     setSuggestions([]);
+  };
+
+  const onSuggestionSelected = (event, { suggestionValue }) => {
+    console.log("Suggestion clicked/selected:", suggestionValue);
+    setCity(suggestionValue);
   };
 
   const inputProps = {
@@ -220,6 +221,7 @@ const TimeZoneComponent = () => {
               onSuggestionsClearRequested={onSuggestionsClearRequested}
               getSuggestionValue={getSuggestionValue}
               renderSuggestion={renderSuggestion}
+              onSuggestionSelected={onSuggestionSelected}
               inputProps={inputProps}
             />
           </div>
