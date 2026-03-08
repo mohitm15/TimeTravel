@@ -58,6 +58,7 @@ const AVAILABLE_CITIES = Object.keys(CITY_TO_COUNTRY_MAP)
 const TimeZoneComponent = () => {
   const [data, setData] = useState(null);
   const [countryStats, setCountryStats] = useState(null);
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [city, setCity] = useState("Kolkata");
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -68,7 +69,7 @@ const TimeZoneComponent = () => {
     fetchTimeZone(city);
   };
 
-  const fetchTimeZone = async (targetCity) => {
+  const fetchTimeZone = (targetCity) => {
     if (!targetCity) return;
     try {
       const countryCode = CITY_TO_COUNTRY_MAP[targetCity]?.code || "ind";
@@ -77,23 +78,36 @@ const TimeZoneComponent = () => {
       const corsProxy = "https://api.allorigins.win/raw?url=";
       const statsApiUrl = encodeURIComponent(`https://www.apicountries.com/alpha/${countryCode}`);
 
-      const [timezoneRes, statsRes] = await Promise.all([
-        fetch(`${API_BASE_URL}${targetCity}`),
-        fetch(`${corsProxy}${statsApiUrl}`)
-      ]);
+      setIsLoadingStats(true);
 
-      if (!timezoneRes.ok) throw new Error(`HTTP error! Status: ${timezoneRes.status}`);
-      const timezoneJson = await timezoneRes.json();
-      setData(timezoneJson);
+      // Fetch TimeZone Data (doesn't wait for Stats)
+      fetch(`${API_BASE_URL}${targetCity}`)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+          return res.json();
+        })
+        .then(timezoneJson => setData(timezoneJson))
+        .catch(error => console.error("Failed to fetch timezone data:", error));
 
-      if (statsRes && statsRes.ok) {
-        const statsJson = await statsRes.json();
-        setCountryStats(statsJson);
-      } else {
-        setCountryStats(null);
-      }
+      // Fetch Country Stats (doesn't hold up TimeZone)
+      fetch(`${corsProxy}${statsApiUrl}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Stats fetch failed");
+          return res.json();
+        })
+        .then(statsJson => {
+          setCountryStats(statsJson);
+          setIsLoadingStats(false);
+        })
+        .catch(error => {
+          console.error("Failed to fetch country stats:", error);
+          setCountryStats(null);
+          setIsLoadingStats(false);
+        });
+
     } catch (error) {
       console.error("Failed to fetch data:", error);
+      setIsLoadingStats(false);
     }
   };
 
@@ -136,7 +150,11 @@ const TimeZoneComponent = () => {
 
   const onAutoChange = (e, { newValue }) => {
     setValue(newValue);
-    setCity(newValue);
+    if (!newValue || newValue.trim() === "") {
+      setCity("Kolkata");
+    } else {
+      setCity(newValue);
+    }
   };
 
   const onSuggestionsFetchRequested = ({ value }) => {
@@ -156,7 +174,7 @@ const TimeZoneComponent = () => {
 
   const clearInput = () => {
     setValue("");
-    setCity("");
+    setCity("Kolkata");
   };
 
   // Safe parsing of datetime
@@ -298,22 +316,30 @@ const TimeZoneComponent = () => {
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                   <span className="w-24 text-gray-400">Capital:</span>
-                  <span className="font-medium text-white">{countryStats?.capital}</span>
+                  <span className="font-medium text-white">
+                    {isLoadingStats ? <div className="h-4 w-24 bg-gray-700/90 rounded animate-pulse"></div> : (countryStats?.capital || "--")}
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   <span className="w-24 text-gray-400">Currency:</span>
-                  <span className="font-medium text-white">{countryStats?.currencies[0] ? `${countryStats.currencies[0].symbol || ""} ( ${countryStats.currencies[0].name || ""})` : "¥ (Placeholder)"}</span>
+                  <span className="font-medium text-white">
+                    {isLoadingStats ? <div className="h-4 w-32 bg-gray-700/90 rounded animate-pulse"></div> : (countryStats?.currencies?.[0] ? `${countryStats.currencies[0].symbol || ""} (${countryStats.currencies[0].name || ""})` : "--")}
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                   <span className="w-24 text-gray-400">Population:</span>
-                  <span className="font-medium text-white">{countryStats?.population ? countryStats.population.toLocaleString() : "120+ Million"}</span>
+                  <span className="font-medium text-white">
+                    {isLoadingStats ? <div className="h-4 w-28 bg-gray-700/90 rounded animate-pulse"></div> : (countryStats?.population ? countryStats.population.toLocaleString() : "--")}
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
                   <span className="w-24 text-gray-400">Language:</span>
-                  <span className="font-medium text-white">{countryStats?.languages?.[0]?.name || "Local / English"}</span>
+                  <span className="font-medium text-white">
+                    {isLoadingStats ? <div className="h-4 w-20 bg-gray-700/90 rounded animate-pulse"></div> : (countryStats?.languages?.[0]?.name || "--")}
+                  </span>
                 </div>
               </div>
 
