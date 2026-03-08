@@ -2,54 +2,53 @@ import React, { useState, useEffect } from "react";
 import Autosuggest from "react-autosuggest/dist/Autosuggest";
 
 //TODO: The api response does not shows the default time after clearing the input
-//TODO: Waving effect of the flag
 //TODO: Integerating the country stats api
 
 const CITY_TO_COUNTRY_MAP = {
-  Almaty: "kazakhstan", Oral: "kazakhstan", Qostanay: "kazakhstan",
-  Amman: "jordan",
-  Ashgabat: "turkmenistan",
-  Baghdad: "iraq",
-  Baku: "azerbaijan",
-  Bangkok: "thailand",
-  Beirut: "lebanon",
-  Bishkek: "kyrgyzstan",
-  Brunei: "brunei",
-  Colombo: "sri-lanka",
-  Damascus: "syria",
-  Dhaka: "bangladesh",
-  Dili: "tuvalu",
-  Dushanbe: "tajikistan",
-  Dubai: "united-arab-emirates",
-  Famagusta: "cyprus", Nicosia: "cyprus",
-  Gaza: "palestine", Hebron: "palestine",
-  Jakarta: "indonesia", Jayapura: "indonesia", Makassar: "indonesia", Pontianak: "indonesia",
-  Jerusalem: "israel",
-  Ho_Chi_Minh: "vietnam",
-  Hong_Kong: "hong-kong",
-  Irkutsk: "russia", Kamchatka: "russia", Krasnoyarsk: "russia", Novokuznetsk: "russia", Omsk: "russia", "Ust-Nera": "russia", Yakutsk: "russia", Vladivostok: "russia",
-  Kabul: "afghanistan",
-  Karachi: "pakistan",
-  Kathmandu: "nepal",
-  Kolkata: "india",
-  Kuala_Lumpur: "malaysia", Kuching: "malaysia",
-  Macau: "macau",
-  Manila: "philippines",
-  Pyongyang: "north-korea",
-  Qatar: "qatar",
-  Riyadh: "saudi-arabia",
-  Sanghai: "china", Urumqi: "china",
-  Samarkand: "uzbekistan", Tashkent: "uzbekistan",
-  Seoul: "south-korea",
-  Singapore: "singapore",
-  Taipei: "taiwan",
-  Tbilisi: "georgia",
-  Tehran: "iran",
-  Thimphu: "bhutan",
-  Tokyo: "japan",
-  Ulaanbaatar: "mongolia", Hovd: "mongolia", Choibalsan: "mongolia",
-  Yangon: "myanmar",
-  Yerevan: "armenia"
+  Almaty: { name: "kazakhstan", code: "kaz" }, Oral: { name: "kazakhstan", code: "kaz" }, Qostanay: { name: "kazakhstan", code: "kaz" },
+  Amman: { name: "jordan", code: "jor" },
+  Ashgabat: { name: "turkmenistan", code: "tkm" },
+  Baghdad: { name: "iraq", code: "irq" },
+  Baku: { name: "azerbaijan", code: "aze" },
+  Bangkok: { name: "thailand", code: "tha" },
+  Beirut: { name: "lebanon", code: "lbn" },
+  Bishkek: { name: "kyrgyzstan", code: "kgz" },
+  Brunei: { name: "brunei", code: "brn" },
+  Colombo: { name: "sri-lanka", code: "lka" },
+  Damascus: { name: "syria", code: "syr" },
+  Dhaka: { name: "bangladesh", code: "bgd" },
+  Dili: { name: "timor-leste", code: "tls" },
+  Dushanbe: { name: "tajikistan", code: "tjk" },
+  Dubai: { name: "united-arab-emirates", code: "are" },
+  Famagusta: { name: "cyprus", code: "cyp" }, Nicosia: { name: "cyprus", code: "cyp" },
+  Gaza: { name: "palestine", code: "pse" }, Hebron: { name: "palestine", code: "pse" },
+  Jakarta: { name: "indonesia", code: "idn" }, Jayapura: { name: "indonesia", code: "idn" }, Makassar: { name: "indonesia", code: "idn" }, Pontianak: { name: "indonesia", code: "idn" },
+  Jerusalem: { name: "israel", code: "isr" },
+  Ho_Chi_Minh: { name: "vietnam", code: "vnm" },
+  Hong_Kong: { name: "hong-kong", code: "hkg" },
+  Irkutsk: { name: "russia", code: "rus" }, Kamchatka: { name: "russia", code: "rus" }, Krasnoyarsk: { name: "russia", code: "rus" }, Novokuznetsk: { name: "russia", code: "rus" }, Omsk: { name: "russia", code: "rus" }, "Ust-Nera": { name: "russia", code: "rus" }, Yakutsk: { name: "russia", code: "rus" }, Vladivostok: { name: "russia", code: "rus" },
+  Kabul: { name: "afghanistan", code: "afg" },
+  Karachi: { name: "pakistan", code: "pak" },
+  Kathmandu: { name: "nepal", code: "npl" },
+  Kolkata: { name: "india", code: "ind" },
+  Kuala_Lumpur: { name: "malaysia", code: "mys" }, Kuching: { name: "malaysia", code: "mys" },
+  Macau: { name: "macau", code: "mac" },
+  Manila: { name: "philippines", code: "phl" },
+  Pyongyang: { name: "north-korea", code: "prk" },
+  Qatar: { name: "qatar", code: "qat" },
+  Riyadh: { name: "saudi-arabia", code: "sau" },
+  Sanghai: { name: "china", code: "chn" }, Urumqi: { name: "china", code: "chn" },
+  Samarkand: { name: "uzbekistan", code: "uzb" }, Tashkent: { name: "uzbekistan", code: "uzb" },
+  Seoul: { name: "south-korea", code: "kor" },
+  Singapore: { name: "singapore", code: "sgp" },
+  Taipei: { name: "taiwan", code: "twn" },
+  Tbilisi: { name: "georgia", code: "geo" },
+  Tehran: { name: "iran", code: "irn" },
+  Thimphu: { name: "bhutan", code: "btn" },
+  Tokyo: { name: "japan", code: "jpn" },
+  Ulaanbaatar: { name: "mongolia", code: "mng" }, Hovd: { name: "mongolia", code: "mng" }, Choibalsan: { name: "mongolia", code: "mng" },
+  Yangon: { name: "myanmar", code: "mmr" },
+  Yerevan: { name: "armenia", code: "arm" }
 };
 
 const AVAILABLE_CITIES = Object.keys(CITY_TO_COUNTRY_MAP)
@@ -58,6 +57,7 @@ const AVAILABLE_CITIES = Object.keys(CITY_TO_COUNTRY_MAP)
 
 const TimeZoneComponent = () => {
   const [data, setData] = useState(null);
+  const [countryStats, setCountryStats] = useState(null);
   const [city, setCity] = useState("Kolkata");
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -71,14 +71,29 @@ const TimeZoneComponent = () => {
   const fetchTimeZone = async (targetCity) => {
     if (!targetCity) return;
     try {
-      const response = await fetch(`${API_BASE_URL}${targetCity}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      const countryCode = CITY_TO_COUNTRY_MAP[targetCity]?.code || "ind";
+
+      // Wrapping the apicountries fetch with a public CORS proxy (allorigins) to prevent the CORS browser block
+      const corsProxy = "https://api.allorigins.win/raw?url=";
+      const statsApiUrl = encodeURIComponent(`https://www.apicountries.com/alpha/${countryCode}`);
+
+      const [timezoneRes, statsRes] = await Promise.all([
+        fetch(`${API_BASE_URL}${targetCity}`),
+        fetch(`${corsProxy}${statsApiUrl}`)
+      ]);
+
+      if (!timezoneRes.ok) throw new Error(`HTTP error! Status: ${timezoneRes.status}`);
+      const timezoneJson = await timezoneRes.json();
+      setData(timezoneJson);
+
+      if (statsRes && statsRes.ok) {
+        const statsJson = await statsRes.json();
+        setCountryStats(statsJson);
+      } else {
+        setCountryStats(null);
       }
-      const json = await response.json();
-      setData(json);
     } catch (error) {
-      console.error("Failed to fetch timezone data:", error);
+      console.error("Failed to fetch data:", error);
     }
   };
 
@@ -87,7 +102,7 @@ const TimeZoneComponent = () => {
   }, [city]);
 
   const cityToCodeMatcher = (cityName) => {
-    return CITY_TO_COUNTRY_MAP[cityName] || "india";
+    return CITY_TO_COUNTRY_MAP[cityName] || { name: "india", code: "ind" };
   };
 
   const escapeRegexCharacters = (str) => {
@@ -106,14 +121,15 @@ const TimeZoneComponent = () => {
   }
 
   const readySRC = (cityName) => {
-    return `https://assets.thebasetrip.com/api/v2/countries/flags/${cityToCodeMatcher(cityName)}.png`;
+    return `https://assets.thebasetrip.com/api/v2/countries/flags/${cityToCodeMatcher(cityName).name}.png`;
   };
 
   function renderSuggestion(suggestion) {
+    const countryData = cityToCodeMatcher(suggestion.name);
     return (
       <div className="flex items-center gap-3">
         <img src={readySRC(suggestion.name)} alt="flag" className="w-6 h-4 object-cover rounded-sm shadow-sm" />
-        <span className="text-base font-medium">{suggestion.name} &mdash; <span className="text-gray-400 capitalize">{cityToCodeMatcher(suggestion.name).replace("-", " ")}</span></span>
+        <span className="text-base font-medium">{suggestion.name} &mdash; <span className="text-gray-400 capitalize">{countryData.name.replace("-", " ")}</span></span>
       </div>
     );
   }
@@ -211,7 +227,7 @@ const TimeZoneComponent = () => {
               <p className="text-gray-300 text-sm mb-2">Selected Capital</p>
               <div className="flex items-center justify-center gap-3">
                 <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <h2 className="text-3xl font-bold text-white tracking-wide">{city}, <span className="font-normal text-gray-300 capitalize">{cityToCodeMatcher(city).replace("-", " ")}</span></h2>
+                <h2 className="text-3xl font-bold text-white tracking-wide">{city}, <span className="font-normal text-gray-300 capitalize">{cityToCodeMatcher(city).name.replace("-", " ")}</span></h2>
                 <img src={readySRC(city)} alt="Small flag" className="w-8 h-6 rounded object-cover shadow-sm ml-2" />
                 <button
                   onClick={handleClick}
@@ -277,27 +293,27 @@ const TimeZoneComponent = () => {
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                   <span className="w-24 text-gray-400">Country:</span>
-                  <span className="font-medium text-white capitalize">{cityToCodeMatcher(city).replace("-", " ")}</span>
+                  <span className="font-medium text-white capitalize">{cityToCodeMatcher(city).name.replace("-", " ")}</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                   <span className="w-24 text-gray-400">Capital:</span>
-                  <span className="font-medium text-white">{city}</span>
+                  <span className="font-medium text-white">{countryStats?.capital}</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   <span className="w-24 text-gray-400">Currency:</span>
-                  <span className="font-medium text-white">¥ (Placeholder)</span>
+                  <span className="font-medium text-white">{countryStats?.currencies[0] ? `${countryStats.currencies[0].symbol || ""} ( ${countryStats.currencies[0].name || ""})` : "¥ (Placeholder)"}</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                   <span className="w-24 text-gray-400">Population:</span>
-                  <span className="font-medium text-white">120+ Million</span>
+                  <span className="font-medium text-white">{countryStats?.population ? countryStats.population.toLocaleString() : "120+ Million"}</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
                   <span className="w-24 text-gray-400">Language:</span>
-                  <span className="font-medium text-white">Local / English</span>
+                  <span className="font-medium text-white">{countryStats?.languages?.[0]?.name || "Local / English"}</span>
                 </div>
               </div>
 
