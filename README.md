@@ -60,10 +60,16 @@ Displays contextual country data using parallel API fetching (with skeleton load
 
 
 ### Desktop View
-![Screenshot from 2022-03-30 17-12-17](https://user-images.githubusercontent.com/35539313/160827133-ba9b7b4a-3837-4adb-9526-2403274f7007.png)
+<img width="1871" height="976" alt="timeTravel_web" src="https://github.com/user-attachments/assets/56a2851f-e807-4e11-a300-e361a6cfda4e" />
+
 
 ### Mobile View
-![Screenshot from 2022-03-30 17-11-55](https://user-images.githubusercontent.com/35539313/160827102-dc202046-e6a5-4384-9e94-631b04327eb9.png)
+
+#### View1
+<img width="400" height="741" alt="timeTravel_mob1" src="https://github.com/user-attachments/assets/b2e6a34c-1436-42db-968a-8dc67b06b330" />
+
+#### View2
+<img width="399" height="888" alt="timeTravel_mob2" src="https://github.com/user-attachments/assets/9bc5ec44-7b4d-4f81-87b8-eff7d719877f" />
 
 ---
 
